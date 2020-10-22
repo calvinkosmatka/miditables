@@ -1,0 +1,12 @@
+[package]
+
+name = "miditables"
+version  = "0.0.1"
+authors = [ "Calvin Kosmatka <calvin.kosmatka@gmail.com>"]
+description = "ALSA MIDI router with iptables style syntax"
+keywords = ["ALSA", "midi", "music"]
+categories = ["multimedia::audio"]
+edition = "2018"
+
+[dependencies]
+alsa = "0.4.2"
