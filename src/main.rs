@@ -3,21 +3,39 @@ extern crate alsa;
 
 //use alsa::seq;
 //use std::env;
+use std::thread;
+use std::sync::{Arc,Mutex, mpsc::channel};
 use miditables::config::Config;
-use miditables::client::SeqClient;
 
 fn main() {
     let mut c = Config::new("conf/miditables.conf");
-    println!("ins: {} outs: {}", c.ins, c.outs);
-    let client = SeqClient::new(c.ins, c.outs);
-    let mut sinput = client.get_input();
+    let (table, mut input, output) = c.parse();
+    let table = Arc::new(table);
+    //let client = Mutex::new(SeqClient::new(c.ins, c.outs));
+    //let mut sinput = client.get_input();
+    //let thread_client = &client;
+    //thread::spawn(move || {
+    //    let data = alsa::seq::EvNote::default();
+    //    let mut x = alsa::seq::Event::new(alsa::seq::EventType::Noteon, &data);
+    //    thread_client.output_event(&mut x);
+    //});
+
+    let (tx, rx) = channel();
+
+    thread::spawn(move || {
+        //output.check_has_input();
+        loop {
+            println!("{:?}",rx.recv());
+
+        }
+    });
 
     loop {
-        let ev = sinput.event_input();
-        let mut ev = match ev {
-            Ok(x) => x,
-            _ => continue,
-        };
-        c.table.process(&mut ev, &client);
+        let mut ev = input.get_event();
+        let clone_table = Arc::clone(&table);
+        let tx1 = tx.clone();
+        thread::spawn(move || {
+            clone_table.process(&mut ev, tx1);
+        });
     }
 }

@@ -9,4 +9,5 @@ categories = ["multimedia::audio"]
 edition = "2018"
 
 [dependencies]
-alsa = "0.4.2"
+alsa = { version = "0.4" }
+libloading = { version = "0.6" }

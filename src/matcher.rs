@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 use alsa::seq;
 
-pub trait Matcher {
+pub trait Matcher: Send {
     fn parse_args(&mut self, args: Vec<String>);
     fn r#match(&mut self, event: &seq::Event) -> bool;
 }

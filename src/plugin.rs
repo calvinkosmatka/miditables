@@ -1,3 +1,8 @@
+use crate::{Matcher, Transformer};
+
+pub type PluginGetMatcherFn = fn(&str) -> Option<Box<dyn Matcher>>;
+pub type PluginGetTransformerFn = fn(&str) -> Option<Box<dyn Transformer>>;
+
 #[macro_export]
 macro_rules! register_matchers {
     ($($matcher_name:literal => $matcher_type:ty),+) => {

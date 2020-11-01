@@ -2,7 +2,7 @@ use super::chain::Chain;
 use super::rules::Jump;
 use std::collections::HashMap;
 use alsa::seq;
-use super::client::SeqClient;
+use super::ThreadOutput;
 
 pub struct Table {
     default_chain: Chain,
@@ -37,8 +37,8 @@ impl Table {
             self.chains.insert(chain_name.to_string(), chain);
         }
     }
-    pub fn process(&mut self, event: &mut seq::Event, seq: &SeqClient) {
-        let mut jump = self.default_chain.process(event, seq);
+    pub fn process(&self, event: &mut seq::Event, seq: ThreadOutput) {
+        let mut jump = self.default_chain.process(event, &seq);
         loop {
             jump = match jump {
                 Jump::Continue => {
@@ -51,7 +51,7 @@ impl Table {
                 Jump::Chain(chain) => {
                     println!("jump to chain {}",chain);
                     //break;
-                    self.chains.get_mut(&chain).unwrap().process(event, seq)
+                    self.chains.get(&chain).unwrap().process(event, &seq)
                 },
             };
         }

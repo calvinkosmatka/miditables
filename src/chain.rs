@@ -1,5 +1,5 @@
 use super::rules::{Rule, Jump};
-use super::client::SeqClient;
+use super::ThreadOutput;
 use alsa::seq;
 
 pub struct Chain {
@@ -12,8 +12,8 @@ impl Chain {
             rules: Vec::new(),
         }
     }
-    pub fn process(&mut self, event: &mut seq::Event, seq: &SeqClient) -> Jump {
-        for rule in self.rules.iter_mut() {
+    pub fn process(&self, event: &mut seq::Event, seq: &ThreadOutput) -> Jump {
+        for rule in self.rules.iter() {
             let j = rule.process(event, seq);
             if let Jump::Continue = j {
                 continue;
