@@ -94,5 +94,9 @@ impl OutputClient {
             client: s,
         }
     }
+    pub fn output_event(&self, event: &mut seq::Event) {
+        event.set_subs();
+        self.client.event_output_direct(event);
+    }
 }
 

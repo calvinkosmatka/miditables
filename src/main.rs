@@ -23,10 +23,10 @@ fn main() {
     let (tx, rx) = channel();
 
     thread::spawn(move || {
-        //output.check_has_input();
         loop {
-            println!("{:?}",rx.recv());
-
+            let mut e = rx.recv().unwrap();
+            println!("{:?}", e);
+            output.output_event(&mut e);
         }
     });
 
