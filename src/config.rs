@@ -12,6 +12,8 @@ use super::rules::{Jump, Rule};
 use super::chain::Chain;
 use super::client::{InputClient,OutputClient};
 use crate::{Transformer,Matcher};
+use crate::matcher::MatcherType::{self, *};
+use crate::transformer::TransformerType::{self, *};
 use crate::plugin::{PluginGetMatcherFn,PluginGetTransformerFn};
 
 fn validate_plugin(lib: &Library) {
@@ -89,8 +91,8 @@ impl Config {
                         None => panic!("empty rule"),
                     };
                     println!("target_chain {}",target_chain);
-                    let mut matchers: Vec<Mutex<Box<dyn Matcher>>> = Vec::new();
-                    let mut transformers: Vec<Mutex<Box<dyn Transformer>>> = Vec::new();
+                    let mut matchers: Vec<MatcherType> = Vec::new();
+                    let mut transformers: Vec<TransformerType> = Vec::new();
                     let mut jump = Jump::Continue;
                     while let Some(chunk) = split.next() {
                         match chunk {
@@ -127,7 +129,7 @@ impl Config {
                                     .unwrap()
                                 };
                                 m.parse_args(match_args);
-                                matchers.push(Mutex::new(m));
+                                matchers.push(LocalMatcher(Mutex::new(m)));
                             },
                             "-t" => {
                                 let transformer_name = split.next()
@@ -162,7 +164,7 @@ impl Config {
                                     .unwrap()
                                 };
                                 t.parse_args(transform_args);
-                                transformers.push(Mutex::new(t));
+                                transformers.push(LocalTransformer(Mutex::new(t)));
                             },
                             "-j" => {
                                 let jump_name = split.next().expect("no jump");

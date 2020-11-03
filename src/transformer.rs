@@ -1,6 +1,12 @@
 use super::ThreadOutput;
 use std::fmt::Debug;
+use std::sync::{Arc, Mutex};
 use alsa::seq;
+
+pub enum TransformerType {
+    LocalTransformer(Mutex<Box<dyn Transformer>>),
+    GlobalTransformer(Arc<Mutex<Box<dyn Transformer>>>),
+}
 
 pub trait Transformer: Send {
     fn parse_args(&mut self, args: Vec<String>);

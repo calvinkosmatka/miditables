@@ -1,5 +1,13 @@
 use std::fmt::Debug;
+use std::sync::{Arc, Mutex};
 use alsa::seq;
+
+pub enum MatcherType {
+    LocalMatcher(Mutex<Box<dyn Matcher>>),
+    LocalMatcherNeg(Mutex<Box<dyn Matcher>>),
+    GlobalMatcher(Arc<Mutex<Box<dyn Matcher>>>),
+    GlobalMatcherNeg(Arc<Mutex<Box<dyn Matcher>>>),
+}
 
 pub trait Matcher: Send {
     fn parse_args(&mut self, args: Vec<String>);
