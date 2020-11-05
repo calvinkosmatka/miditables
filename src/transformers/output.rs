@@ -1,6 +1,7 @@
 use std::str::FromStr;
 use crate::ThreadOutput;
 use crate::Transformer;
+use crate::SendEventType::{self, *};
 use alsa::seq;
 
 pub struct OutputTransformer {
@@ -20,7 +21,7 @@ impl Transformer for OutputTransformer {
         if let Some(port) = self.port {
             event.set_source(port as i32);
         }
-        seq.send(event.clone().into_owned());
+        seq.send(Output(event.clone().into_owned()));
     }
 }
 

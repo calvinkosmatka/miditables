@@ -6,6 +6,7 @@ extern crate alsa;
 use std::thread;
 use std::sync::{Arc,Mutex, mpsc::channel};
 use miditables::config::Config;
+use miditables::SendEventType::{self,*};
 
 fn main() {
     let mut c = Config::new("conf/miditables.conf");
@@ -15,9 +16,13 @@ fn main() {
 
     thread::spawn(move || {
         loop {
-            let mut e = rx.recv().unwrap();
-            println!("{:?}", e);
-            output.output_event(&mut e);
+            let e = rx.recv().unwrap();
+            match e {
+                Output(mut e) => {
+                    println!("{:?}", e);
+                    output.output_event(&mut e);
+                }
+            }
         }
     });
 

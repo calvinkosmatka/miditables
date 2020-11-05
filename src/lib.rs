@@ -16,4 +16,8 @@ pub mod transformers;
 pub mod config;
 pub mod client;
 
-pub type ThreadOutput<'a> = Sender<alsa::seq::Event<'a>>;
+pub enum SendEventType<'a> {
+    Output(alsa::seq::Event<'a>)
+}
+
+pub type ThreadOutput<'a> = Sender<SendEventType<'a>>;
