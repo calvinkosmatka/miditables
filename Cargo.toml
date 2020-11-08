@@ -1,7 +1,7 @@
 [package]
 
 name = "miditables"
-version  = "0.1.0"
+version  = "0.1.1"
 authors = [ "Calvin Kosmatka <calvin.kosmatka@gmail.com>"]
 description = "ALSA MIDI router with iptables style syntax"
 keywords = ["ALSA", "midi", "music"]
