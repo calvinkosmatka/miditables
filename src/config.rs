@@ -107,7 +107,7 @@ impl Config {
                         match chunk {
                             // will need to clean this up to enforce matcher* transformer* jump?
                             // format
-                            "-m" => {
+                            "-m" | "-!m" => {
                                 let matcher_name = split.next().expect("no matcher");
                                 println!("matcher name {}", matcher_name);
                                 let mut match_args: Vec<String> = Vec::new();
@@ -135,38 +135,11 @@ impl Config {
                                     get_matcher(matcher_name).unwrap()
                                 };
                                 m.parse_args(match_args);
-                                matchers.push(LocalMatcher(Mutex::new(m)));
-                            }
-                            // it seems excessive to duplicate all of this
-                            "-!m" => {
-                                let matcher_name = split.next().expect("no matcher");
-                                println!("matcher name {}", matcher_name);
-                                let mut match_args: Vec<String> = Vec::new();
-                                loop {
-                                    match split.peek() {
-                                        Some(arg) => {
-                                            if arg.starts_with("-") {
-                                                break;
-                                            } else {
-                                                println!("\targ: {}", arg);
-                                                match_args.push(split.next().unwrap().to_string());
-                                            }
-                                        }
-                                        None => break,
-                                    }
+                                if chunk == "-m" {
+                                    matchers.push(LocalMatcher(Mutex::new(m)));
+                                } else if chunk == "-!m" {
+                                    matchers.push(LocalMatcherNeg(Mutex::new(m)));
                                 }
-                                let mut m = if matcher_name.contains(":") {
-                                    let mut mspl = matcher_name.split(":");
-                                    let ns = mspl.next().expect("something is wrong");
-                                    let matcher_name = mspl.next().expect("need a matcher name");
-                                    // let this stabilize first, ignre for now
-                                    // mspl.next().expect_none("too many colons");
-                                    self.get_lib_matcher(ns, matcher_name)
-                                } else {
-                                    get_matcher(matcher_name).unwrap()
-                                };
-                                m.parse_args(match_args);
-                                matchers.push(LocalMatcherNeg(Mutex::new(m)));
                             }
                             "-t" => {
                                 let transformer_name = split.next().expect("no transformer");
