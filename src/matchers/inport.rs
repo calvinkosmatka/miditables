@@ -3,7 +3,7 @@ use alsa::seq;
 use std::str::FromStr;
 
 pub struct InPortMatcher {
-    in_port: u8
+    in_port: u8,
 }
 
 impl Matcher for InPortMatcher {
@@ -17,8 +17,6 @@ impl Matcher for InPortMatcher {
 
 impl InPortMatcher {
     pub fn new() -> InPortMatcher {
-        InPortMatcher {
-            in_port: 0
-        }
+        InPortMatcher { in_port: 0 }
     }
 }

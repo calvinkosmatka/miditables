@@ -1,8 +1,8 @@
 use super::chain::Chain;
 use super::rules::Jump;
-use std::collections::HashMap;
-use alsa::seq;
 use super::ThreadOutput;
+use alsa::seq;
+use std::collections::HashMap;
 
 pub struct Table {
     default_chain: Chain,
@@ -32,8 +32,7 @@ impl Table {
         // do some checking about chain names here
         if self.chains.contains_key(chain_name) && chain_name != "default" {
             panic!("chain already exists");
-        }
-        else {
+        } else {
             self.chains.insert(chain_name.to_string(), chain);
         }
     }
@@ -44,15 +43,15 @@ impl Table {
                 Jump::Continue => {
                     // a chain really shouldn't return this
                     break;
-                },
+                }
                 Jump::End => {
                     break;
-                },
+                }
                 Jump::Chain(chain) => {
-                    println!("jump to chain {}",chain);
+                    println!("jump to chain {}", chain);
                     //break;
                     self.chains.get(&chain).unwrap().process(event, &seq)
-                },
+                }
             };
         }
     }

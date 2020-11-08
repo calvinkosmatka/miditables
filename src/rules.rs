@@ -1,5 +1,11 @@
-use super::matcher::{Matcher, MatcherType::{self, *}};
-use super::transformer::{Transformer, TransformerType::{self, *}};
+use super::matcher::{
+    Matcher,
+    MatcherType::{self, *},
+};
+use super::transformer::{
+    Transformer,
+    TransformerType::{self, *},
+};
 use super::ThreadOutput;
 use alsa::seq;
 use std::sync::Mutex;
@@ -15,7 +21,7 @@ impl Rule {
         Rule {
             matchers,
             transformers,
-            jump
+            jump,
         }
     }
     pub fn process(&self, event: &mut seq::Event, seq: &ThreadOutput) -> Jump {
@@ -25,17 +31,17 @@ impl Rule {
                     if !m.lock().unwrap().r#match(event) {
                         return Jump::Continue;
                     }
-                },
+                }
                 LocalMatcherNeg(m) => {
                     if m.lock().unwrap().r#match(event) {
                         return Jump::Continue;
                     }
-                },
+                }
                 GlobalMatcher(m) => {
                     if !m.lock().unwrap().r#match(event) {
                         return Jump::Continue;
                     }
-                },
+                }
                 GlobalMatcherNeg(m) => {
                     if m.lock().unwrap().r#match(event) {
                         return Jump::Continue;
@@ -47,7 +53,7 @@ impl Rule {
             match transformer {
                 LocalTransformer(t) => {
                     t.lock().unwrap().transform(event, seq);
-                },
+                }
                 GlobalTransformer(t) => {
                     t.lock().unwrap().transform(event, seq);
                 }
@@ -57,8 +63,7 @@ impl Rule {
     }
 }
 
-#[derive(Clone)]
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Jump {
     Continue,
     End,

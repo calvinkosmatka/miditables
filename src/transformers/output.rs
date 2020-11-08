@@ -1,20 +1,18 @@
-use std::str::FromStr;
+use crate::SendEventType::{self, *};
 use crate::ThreadOutput;
 use crate::Transformer;
-use crate::SendEventType::{self, *};
 use alsa::seq;
+use std::str::FromStr;
 
 pub struct OutputTransformer {
-    port: Option<u8>    
+    port: Option<u8>,
 }
 
 impl Transformer for OutputTransformer {
     fn parse_args(&mut self, args: Vec<String>) {
         self.port = match args.get(0) {
-            Some(x) => {
-                Some(u8::from_str(x).expect("not a u8"))
-            },
-            None => { None },
+            Some(x) => Some(u8::from_str(x).expect("not a u8")),
+            None => None,
         };
     }
     fn transform(&mut self, event: &mut seq::Event, seq: &ThreadOutput) {
@@ -27,8 +25,6 @@ impl Transformer for OutputTransformer {
 
 impl OutputTransformer {
     pub fn new() -> OutputTransformer {
-        OutputTransformer {
-            port: None
-        }
+        OutputTransformer { port: None }
     }
 }

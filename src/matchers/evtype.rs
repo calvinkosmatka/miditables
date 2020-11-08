@@ -1,6 +1,6 @@
 use crate::matcher::Matcher;
-use std::collections::HashSet;
 use alsa::seq::{self, EventType};
+use std::collections::HashSet;
 
 pub struct EvTypeMatcher {
     types_to_match: HashSet<EventType>,
@@ -12,13 +12,13 @@ impl Matcher for EvTypeMatcher {
             match evtype.as_ref() {
                 "noteon" => {
                     self.types_to_match.insert(EventType::Noteon);
-                },
+                }
                 "noteoff" => {
                     self.types_to_match.insert(EventType::Noteoff);
-                },
+                }
                 "note" => {
                     self.types_to_match.insert(EventType::Note);
-                },
+                }
                 x => {
                     println!("evtypematcher {}", x);
                 }
@@ -33,7 +33,7 @@ impl Matcher for EvTypeMatcher {
 impl EvTypeMatcher {
     pub fn new() -> EvTypeMatcher {
         EvTypeMatcher {
-            types_to_match: HashSet::new()
+            types_to_match: HashSet::new(),
         }
     }
 }

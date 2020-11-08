@@ -1,4 +1,4 @@
-use super::rules::{Rule, Jump};
+use super::rules::{Jump, Rule};
 use super::ThreadOutput;
 use alsa::seq;
 
@@ -8,9 +8,7 @@ pub struct Chain {
 
 impl Chain {
     pub fn new() -> Chain {
-        Chain {
-            rules: Vec::new(),
-        }
+        Chain { rules: Vec::new() }
     }
     pub fn process(&self, event: &mut seq::Event, seq: &ThreadOutput) -> Jump {
         for rule in self.rules.iter() {

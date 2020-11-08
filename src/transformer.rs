@@ -1,7 +1,7 @@
 use super::ThreadOutput;
+use alsa::seq;
 use std::fmt::Debug;
 use std::sync::{Arc, Mutex};
-use alsa::seq;
 
 pub enum TransformerType {
     LocalTransformer(Mutex<Box<dyn Transformer>>),

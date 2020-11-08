@@ -1,6 +1,6 @@
+use alsa::seq;
 use std::fmt::Debug;
 use std::sync::{Arc, Mutex};
-use alsa::seq;
 
 pub enum MatcherType {
     LocalMatcher(Mutex<Box<dyn Matcher>>),
@@ -19,4 +19,3 @@ impl Debug for dyn Matcher {
         write!(f, "dyn Matcher")
     }
 }
-
