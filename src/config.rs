@@ -79,7 +79,6 @@ impl Config {
                     .expect("not a u8");
                 }
                 Some("#plugin:") => {
-                    println!("here");
                     let lib_path = split.next().expect("#plugin requires plugin (none given)");
                     let lib =
                         Library::new(&lib_path).expect(&format!("failed to load {}", lib_path));
@@ -99,7 +98,7 @@ impl Config {
                         }
                         None => panic!("empty rule"),
                     };
-                    println!("target_chain {}", target_chain);
+                    //println!("target_chain {}", target_chain);
                     let mut matchers: Vec<MatcherType> = Vec::new();
                     let mut transformers: Vec<TransformerType> = Vec::new();
                     let mut jump = Jump::Continue;
@@ -109,7 +108,7 @@ impl Config {
                             // format
                             "-m" | "-!m" => {
                                 let matcher_name = split.next().expect("no matcher");
-                                println!("matcher name {}", matcher_name);
+                                //println!("matcher name {}", matcher_name);
                                 let mut match_args: Vec<String> = Vec::new();
                                 loop {
                                     match split.peek() {
@@ -117,7 +116,7 @@ impl Config {
                                             if arg.starts_with("-") {
                                                 break;
                                             } else {
-                                                println!("\targ: {}", arg);
+                                                //println!("\targ: {}", arg);
                                                 match_args.push(split.next().unwrap().to_string());
                                             }
                                         }
@@ -143,7 +142,7 @@ impl Config {
                             }
                             "-t" => {
                                 let transformer_name = split.next().expect("no transformer");
-                                println!("transformer name {}", transformer_name);
+                                //println!("transformer name {}", transformer_name);
                                 let mut transform_args: Vec<String> = Vec::new();
                                 loop {
                                     match split.peek() {
@@ -151,7 +150,7 @@ impl Config {
                                             if arg.starts_with("-") {
                                                 break;
                                             } else {
-                                                println!("\targ: {}", arg);
+                                                //println!("\targ: {}", arg);
                                                 transform_args
                                                     .push(split.next().unwrap().to_string());
                                             }
@@ -180,7 +179,7 @@ impl Config {
                                     "continue" => Jump::Continue,
                                     x => Jump::Chain(x.to_string()),
                                 };
-                                println!("jump {:?}", jump);
+                                //println!("jump {:?}", jump);
                             }
                             _ => println!("handler not implemented {}", chunk),
                         }
@@ -196,7 +195,7 @@ impl Config {
                 Some("-N") => {
                     let chain_name = split.next().expect("no chain name");
                     table.add_chain(chain_name, Chain::new());
-                    println!("new chain {}", chain_name);
+                    //println!("new chain {}", chain_name);
                 }
                 Some(x) => {
                     println!("Some({})", x);

@@ -18,7 +18,6 @@ fn main() {
         let e = rx.recv().unwrap();
         match e {
             Output(mut e) => {
-                println!("{:?}", e);
                 output.output_event(&mut e);
             }
         }

@@ -47,11 +47,7 @@ impl Table {
                 Jump::End => {
                     break;
                 }
-                Jump::Chain(chain) => {
-                    println!("jump to chain {}", chain);
-                    //break;
-                    self.chains.get(&chain).unwrap().process(event, &seq)
-                }
+                Jump::Chain(chain) => self.chains.get(&chain).unwrap().process(event, &seq),
             };
         }
     }
